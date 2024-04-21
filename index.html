@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        ul{
+            margin: 0;
+            list-style: none;
+            /* border: 1px solid red; */
+        }
+        ul li{
+            padding: 10px;
+        }
+        ul li > div{
+            display: flex;
+            align-items: center;
+        }
+        .icon{
+            display: inline-block;
+            vertical-align: top;
+            width: 20px;
+            height: 12px;
+            position: relative;
+            margin-right: 5px;
+            cursor: move;
+        }
+        .icon:before,
+        .icon:after{
+            content: '';
+            width: 20px;
+            height: 4px;
+            background: #000;
+            position: absolute;
+            left: 0;
+            border-radius: 20px;
+        }
+        .icon:before{top: 0;}
+        .icon:after{bottom: 0;}
+    </style>
+</head>
+<body>
+    <ul>
+        <li><strong>안녕1</strong></li>
+        <li><strong>안녕2</strong></li>
+        <li><strong>안녕3</strong></li>
+        <li><strong>안녕4</strong></li>
+        <li><strong>안녕5</strong></li>
+    </ul>
+    
+    <script src="./ro.js"></script>
+    <script>
+        const a = new SaltedText();
+
+        const b = new Treee({
+            root: document.querySelector('ul'),
+            item: document.querySelectorAll('ul li'),
+            data: [
+                {
+                   name: 'abc1',
+                    code: 'abc1',
+                    children: [
+                        {
+                            name: 'abc11',
+                            code: 'abc11',
+                        },
+                        {
+                            name: 'abc12',
+                            code: 'abc12',
+                            children: [
+                                {
+                                    name: 'abc121',
+                                    code: 'abc121',
+                                },
+                                {
+                                    name: 'abc122',
+                                    code: 'abc122',
+                                }
+                            ],
+                        },
+                        {
+                            name: 'abc13',
+                            code: 'abc13',
+                        },
+                    ]
+                },
+                {
+                    name: 'abc2',
+                    code: 'abc2'
+                }
+            ]
+        }).makeTree();
+    </script>
+</body>
+</html>
