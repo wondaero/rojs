@@ -39,6 +39,15 @@
         }
         .icon:before{top: 0;}
         .icon:after{bottom: 0;}
+
+        ul li.target-li > div > label{background: yellow;}
+        ul li.target-li > div > label{background: yellow; animation: li-active .2s infinite alternate;}
+        
+        ul li.from-drag{opacity: .2;}
+        @keyframes li-active{
+            from{transform: translateX(0);}
+            to{transform: translateX(10px);}
+        }
     </style>
 </head>
 <body>

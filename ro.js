@@ -39,6 +39,7 @@ class Treee{
         this.treeDom;
         this.dragEl;
         this.dropEl;
+        this.activeEl;
 
         return this;
 
@@ -79,6 +80,7 @@ class Treee{
 
         const drag = (e) => {
             this.dragEl = e.target.closest('li');
+            this.dragEl.classList.add('from-drag');
             e.dataTransfer.setData('myData', this.dragEl.innerHTML);
         }
         const drop = (e) => {
@@ -93,10 +95,33 @@ class Treee{
                 this.dropEl = newUl;
             }
 
-            this.dropEl.append(this.dragEl);
+
+            try{
+                this.dropEl.append(this.dragEl);
+            }catch(e){
+                alert('실패하였습니다.');
+            }
+
+            const hasClassTag = this.treeDom.querySelector('.target-li');
+            if(hasClassTag) hasClassTag.classList.remove('target-li');
+            this.dragEl.classList.remove('from-drag');
         }
 
-        const preventDflt = (e) => {
+        const dragover = (e) => {
+            if(this.activeEl === (e.target.nodeName === 'LI' ? e.target : e.target.closest('li'))){
+                e.preventDefault();
+                return;
+            };
+
+            this.activeEl = e.target.nodeName === 'LI' ? e.target : e.target.closest('li');
+
+            if(this.dragEl === this.activeEl) return;
+
+            const hasClassTag = this.treeDom.querySelector('.target-li');
+            if(hasClassTag) hasClassTag.classList.remove('target-li');
+
+            this.activeEl.classList.add('target-li');
+
             e.preventDefault();
         }
 
@@ -104,7 +129,7 @@ class Treee{
         if(!this.treeDom){
             this.treeDom = document.createElement('ul');
             this.treeDom.ondrop = drop;
-            this.treeDom.ondragover = preventDflt;
+            this.treeDom.ondragover = dragover;
         }
 
 
@@ -117,7 +142,7 @@ class Treee{
                     <label>
                         <strong>name</strong>
                         <input type="text" value="${el.name}" />
-                    <label>
+                    </label>
                 </div>
             `;
 
@@ -153,21 +178,4 @@ class Treee{
         document.body.appendChild(this.treeDom);
 
     }
-
-
 }
-
-// const stopp = (e) => { 
-//     e.preventDefault() 
-// }
-// const drop = (e) => {
-//     console.log(444);
-//     // this.dropEl = e.target;
-//     // this.dropEl.append(dragEl);
-// }
-
-// const drag = (e) => {
-//     this.dragEl = e.target;
-//     console.log(this.dragEl);
-//     e.dataTransfer.setData('myData', this.dragEl.innerHTML);
-// }
