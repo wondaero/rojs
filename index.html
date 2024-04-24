@@ -48,6 +48,37 @@
             from{transform: translateX(0);}
             to{transform: translateX(10px);}
         }
+
+
+
+
+
+        .custom-textarea{
+            border: 1px solid #000;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .custom-textarea header{
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .custom-textarea header ul{
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #000;
+            width: 100%;
+        }
+        .custom-textarea .textarea{
+            min-height: 200px;
+            padding: 10px;
+        }
+        .custom-textarea .textarea .img-wrapper{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -58,49 +89,56 @@
         <li><strong>안녕4</strong></li>
         <li><strong>안녕5</strong></li>
     </ul>
+
+    <div id="cstmTextarea"></div>
     
     <script src="./ro.js"></script>
     <script>
         const a = new SaltedText();
 
-        const b = new Treee({
-            root: document.querySelector('ul'),
-            item: document.querySelectorAll('ul li'),
-            data: [
-                {
-                   name: 'abc1',
-                    code: 'abc1',
-                    children: [
-                        {
-                            name: 'abc11',
-                            code: 'abc11',
-                        },
-                        {
-                            name: 'abc12',
-                            code: 'abc12',
-                            children: [
-                                {
-                                    name: 'abc121',
-                                    code: 'abc121',
-                                },
-                                {
-                                    name: 'abc122',
-                                    code: 'abc122',
-                                }
-                            ],
-                        },
-                        {
-                            name: 'abc13',
-                            code: 'abc13',
-                        },
-                    ]
-                },
-                {
-                    name: 'abc2',
-                    code: 'abc2'
-                }
-            ]
-        }).makeTree();
+        // const b = new Treee({
+        //     root: document.querySelector('ul'),
+        //     item: document.querySelectorAll('ul li'),
+        //     data: [
+        //         {
+        //            name: 'abc1',
+        //             code: 'abc1',
+        //             children: [
+        //                 {
+        //                     name: 'abc11',
+        //                     code: 'abc11',
+        //                 },
+        //                 {
+        //                     name: 'abc12',
+        //                     code: 'abc12',
+        //                     children: [
+        //                         {
+        //                             name: 'abc121',
+        //                             code: 'abc121',
+        //                         },
+        //                         {
+        //                             name: 'abc122',
+        //                             code: 'abc122',
+        //                         }
+        //                     ],
+        //                 },
+        //                 {
+        //                     name: 'abc13',
+        //                     code: 'abc13',
+        //                 },
+        //             ]
+        //         },
+        //         {
+        //             name: 'abc2',
+        //             code: 'abc2'
+        //         }
+        //     ]
+        // }).makeTree();
+
+        const c = new TextArea2({
+            target: cstmTextarea
+        });
+
     </script>
 </body>
 </html>

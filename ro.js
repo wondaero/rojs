@@ -43,25 +43,6 @@ class Treee{
 
         return this;
 
-        // const drag = (e) => {
-        //     this.dragEl = e.target;
-        //     console.log(this.dragEl);
-        //     e.dataTransfer.setData('myData', this.dragEl.innerHTML);
-        // }
-        // const drop = (e) => {
-        //     console.log(e.target);
-        //     this.dropEl = e.target;
-        //     this.dropEl.append(this.dragEl);
-        // }
-        // const preventDflt = (e) => {
-        //     e.preventDefault();
-        // }
-        // param.root.ondrop = drop;
-        // param.root.ondragover = preventDflt;
-        // param.item.forEach(itm => {
-        //     itm.draggable = true;
-        //     itm.ondragstart = drag;
-        // })
     }
 
     makeTemplate(tmpl){
@@ -178,4 +159,88 @@ class Treee{
         document.body.appendChild(this.treeDom);
 
     }
+}
+
+class TextArea2{
+    constructor(param){
+        this.target = param.target;
+        this.target.classList.add('custom-textarea');
+        this.files = [];
+
+        this.createHeader();
+        this.createBody();
+
+
+        if(param.option){
+
+        }
+
+    }
+    createHeader(){
+        const header = document.createElement('header');
+        const ul = document.createElement('ul');
+
+        let li;
+        for(let i = 0; i < 1; i++){
+            li = document.createElement('li');
+            li.textContent = '이미지';
+            li.addEventListener('click', () => {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.click();
+
+                fileInput.addEventListener('change', (e) => {
+
+                    this.files.push(e.target.files[0]);
+
+                    console.log(this.files);
+
+                    this.previewImg(this.files[0]);
+
+
+                })
+            })
+            ul.appendChild(li);
+        }
+        // const imgBtn = document.createElement('button');
+        // imgBtn.textConent = '이미지';
+
+        header.appendChild(ul);
+        this.target.appendChild(header);
+    }
+
+    createBody(){
+        this.body = document.createElement('div');
+        this.body.classList.add('textarea')
+        this.body.contentEditable = true;
+
+        this.target.append(this.body);
+    }
+
+    previewImg(file){
+        const t = this;
+        if(file){
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const wrapper = document.createElement('div');
+                const addedDiv = document.createElement('div');
+                wrapper.contentEditable = false;
+                addedDiv.style.height = '21px';
+                wrapper.classList.add('img-wrapper');
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                
+                wrapper.appendChild(img);
+                
+                console.log(t.body);
+                
+                t.body.appendChild(wrapper);
+                t.body.appendChild(addedDiv);
+            }
+               
+            reader.readAsDataURL(file);
+        }
+    }
+
 }
