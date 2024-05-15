@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div#editor {
+            padding: 16px 24px;
+            border: 1px solid #D6D6D6;
+            border-radius: 4px;
+        }
+        #img-selector {
+            display: none;
+        }
+        #editor img {
+            max-width: 100%;
+        }
+        button.active {
+            background-color: purple;
+            color: #FFF;
+        }
+    </style>
+</head>
+<body>
+    <div class="editor-menu">
+        <button id="btn-bold">
+            <b>B</b>
+        </button>
+        <button id="btn-italic">
+            <i>I</i>
+        </button>
+        <button id="btn-underline">
+            <u>U</u>
+        </button>
+        <button id="btn-strike">
+            <s>S</s>
+        </button>
+        <button id="btn-ordered-list">
+            OL
+        </button>
+        <button id="btn-unordered-list">
+            UL
+        </button>
+        <button id="btn-image">
+            IMG
+        </button>
+    </div>
+    <div id="editor" contenteditable="true"></div>
+    <input id="img-selector" type="file" accept="image/*"/>
+
+
+    <script>
+        const editor = document.getElementById('editor');
+        const btnBold = document.getElementById('btn-bold');
+        const btnItalic = document.getElementById('btn-italic');
+        const btnUnderline = document.getElementById('btn-underline');
+        const btnStrike = document.getElementById('btn-strike');
+        const btnOrderedList = document.getElementById('btn-ordered-list');
+        const btnUnorderedList = document.getElementById('btn-unordered-list');
+
+        const btnImage = document.getElementById('btn-image');
+        const imageSelector = document.getElementById('img-selector');
+
+        
+        btnBold.addEventListener('click', function () {
+            setStyle('bold');
+        });
+    
+        btnItalic.addEventListener('click', function () {
+            setStyle('italic');
+        });
+    
+        btnUnderline.addEventListener('click', function () {
+            setStyle('underline');
+        });
+    
+        btnStrike.addEventListener('click', function () {
+            setStyle('strikeThrough')
+        });
+    
+        btnOrderedList.addEventListener('click', function () {
+            setStyle('insertOrderedList');
+        });
+    
+        btnUnorderedList.addEventListener('click', function () {
+            setStyle('insertUnorderedList');
+        });
+
+
+        btnImage.addEventListener('click', function () {
+            imageSelector.click();
+        });
+
+        imageSelector.addEventListener('change', function (e) {
+            const files = e.target.files;
+            if (!!files) {
+                insertImageDate(files[0]);
+            }
+        });
+
+
+        function insertImageDate(file) {
+            const reader = new FileReader();
+            reader.addEventListener('load', function (e) {
+                focusEditor();
+                document.execCommand('insertImage', false, `${reader.result}`);
+            });
+            reader.readAsDataURL(file);
+        }
+
+
+        editor.addEventListener('keydown', function () {
+            checkStyle();
+        });
+
+        editor.addEventListener('mousedown', function () {
+            checkStyle();
+        });
+
+
+    
+        function setStyle(style) {
+            document.execCommand(style);
+            focusEditor();
+        }
+    
+        // 버튼 클릭 시 에디터가 포커스를 잃기 때문에 다시 에디터에 포커스를 해줌
+        function focusEditor() {
+            editor.focus({preventScroll: true});
+        }
+
+        function setStyle(style) {
+            document.execCommand(style);
+            focusEditor();
+            checkStyle();
+        }
+        
+        
+        function checkStyle() {
+            if (isStyle('bold')) {
+                btnBold.classList.add('active');
+            } else {
+                btnBold.classList.remove('active');
+            }
+            if (isStyle('italic')) {
+                btnItalic.classList.add('active');
+            } else {
+                btnItalic.classList.remove('active');
+            }
+            if (isStyle('underline')) {
+                btnUnderline.classList.add('active');
+            } else {
+                btnUnderline.classList.remove('active');
+            }
+            if (isStyle('strikeThrough')) {
+                btnStrike.classList.add('active');
+            } else {
+                btnStrike.classList.remove('active');
+            }
+            if (isStyle('insertOrderedList')) {
+                btnOrderedList.classList.add('active');
+            } else {
+                btnOrderedList.classList.remove('active');
+            }
+            if (isStyle('insertUnorderedList')) {
+                btnUnorderedList.classList.add('active');
+            } else {
+                btnUnorderedList.classList.remove('active');
+            }
+        }
+
+        function isStyle(style) {
+            return document.queryCommandState(style);
+        }
+        //출처: https://dev-bak.tistory.com/16 [DEV.Bak:티스토리]
+    </script>
+
+</body>
+</html>

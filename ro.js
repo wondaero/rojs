@@ -8,7 +8,7 @@ class SaltedText{
         const pickedStr = this.str[txt.length % this.str.length];
         const pickedStr2 = this.str[this.str.length - (txt.length % this.str.length)];
 
-        this.txt = pickedStr + pickedStr2 +  this.txt + pickedStr2 + pickedStr;
+        this.txt = pickedStr + pickedStr2 + this.txt + pickedStr2 + pickedStr;
 
         return this.txt;
     }
@@ -161,13 +161,35 @@ class Treee{
     }
 }
 
-class TextArea2{
+class UtilFnc{
     constructor(param){
+        this.char = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    }
+    getRandomNum(mn, mx){
+        return Math.floor(Math.random() * (mx - mn + 1)) + mn;
+    }
+
+    getRdmTxt(len){
+        let rdmTxt = '';
+        for(let i = 0; i < len; i++){
+            rdmTxt += this.char[this.getRandomNum(0, this.char.length - 1)];
+        }
+
+        return rdmTxt;
+    }
+}
+
+
+class TextArea2 extends UtilFnc{
+    constructor(param){
+        super();
         this.target = param.target;
         this.target.classList.add('custom-textarea');
         this.files = [];
+        this.editable = param.editable !== undefined ? param.editable : true;
 
-        this.createHeader();
+
+        if(this.editable) this.createHeader();
         this.createBody();
 
 
@@ -191,6 +213,10 @@ class TextArea2{
 
                 fileInput.addEventListener('change', (e) => {
 
+                    const fileId = super.getRdmTxt(12);
+
+                    e.target.files[0].fileId = fileId;
+
                     this.files.push(e.target.files[0]);
 
                     console.log(this.files);
@@ -211,8 +237,8 @@ class TextArea2{
 
     createBody(){
         this.body = document.createElement('div');
-        this.body.classList.add('textarea')
-        this.body.contentEditable = true;
+        this.body.classList.add('textarea');
+        this.body.contentEditable = this.editable;
 
         this.target.append(this.body);
     }
@@ -223,24 +249,39 @@ class TextArea2{
             const reader = new FileReader();
 
             reader.onload = function (e) {
-                const wrapper = document.createElement('div');
-                const addedDiv = document.createElement('div');
-                wrapper.contentEditable = false;
-                addedDiv.style.height = '21px';
-                wrapper.classList.add('img-wrapper');
+
                 const img = document.createElement('img');
                 img.src = e.target.result;
-                
-                wrapper.appendChild(img);
-                
-                console.log(t.body);
-                
-                t.body.appendChild(wrapper);
-                t.body.appendChild(addedDiv);
+                img.dataset.id = file.fileId;
+                t.body.appendChild(img);
             }
                
             reader.readAsDataURL(file);
         }
     }
 
+    text2obj(){
+        const t = this;
+        const validFiles = [];
+        const tmpTag = document.createElement('div');
+        tmpTag.innerHTML = this.body.innerHTML;
+
+        let validFile;
+        tmpTag.querySelectorAll('img').forEach((img, idx) => {
+            validFile = t.files.filter(f => f.fileId === img.dataset.id)[0];
+
+            if(validFile) validFiles.push(validFile);
+
+            if(img.src.indexOf('data:image') === 0) img.src = '';
+        })
+
+        return {
+            files: validFiles,
+            content: tmpTag.innerHTML
+        }
+    }
+
+    getContent(c){
+        this.body.innerHTML = c;
+    }
 }

@@ -76,8 +76,16 @@
             min-height: 200px;
             padding: 10px;
         }
-        .custom-textarea .textarea .img-wrapper{
-            text-align: center;
+        .custom-textarea .textarea > div{
+        }
+        .custom-textarea .textarea img{
+            display: block;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .custom-textarea .textarea .no-focus{
+            outline: 0;
+            border: 0;
         }
     </style>
 </head>
@@ -136,8 +144,13 @@
         // }).makeTree();
 
         const c = new TextArea2({
-            target: cstmTextarea
+            target: cstmTextarea,
+            editable: false
         });
+
+        c.getContent(`<img src="./assets/imgs/sample.png" />안녕`);
+
+        
 
     </script>
 </body>
