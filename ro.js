@@ -284,4 +284,8 @@ class TextArea2 extends UtilFnc{
     getContent(c){
         this.body.innerHTML = c;
     }
+
+    setEditable(){
+        this.editable = !this.editable;
+    }
 }
