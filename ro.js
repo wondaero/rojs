@@ -289,3 +289,135 @@ class TextArea2 extends UtilFnc{
         this.editable = !this.editable;
     }
 }
+
+class Probability extends UtilFnc{
+    constructor(param){
+        super();
+
+        this.param = param;
+
+        let val;
+        let others = [];
+        let tmpNum = 0;
+        for(let key in param){
+            val = param[key];
+
+            if(typeof val === 'boolean' && val === true){
+                others.push({key: val});
+            }
+
+            if(!isNaN(val)){
+
+            }
+
+
+        }
+
+    }
+
+    initData(param){
+        this.param = param;
+    }
+
+    getItem(param){
+        const rdmNum = Math.random();
+        console.log(rdmNum);
+        const finalTable = {};
+        
+        let val;
+        let others = [];
+        let tmpNum = 0;
+        for(let key in this.param){
+            val = this.param[key];
+            if(typeof val === 'boolean' && val === true){
+                others.push(key);
+            }else if(!isNaN(val) && val !== false){
+                finalTable[key] = val;
+                tmpNum += val;
+            }
+        }
+
+        others.forEach(o => {
+            finalTable[o] = ((100 - tmpNum) / others.length);
+        })
+        
+        tmpNum = 0;
+        let rtnVal = {};
+        for(let key in finalTable){
+            val = finalTable[key];
+
+            tmpNum += val;
+            if(rdmNum < tmpNum * 0.01){
+                // rtnVal = {[key]: val};
+                rtnVal = {
+                    name: key,
+                    per: val + '%'
+                };
+                break;
+            }
+        }
+
+        console.log(rtnVal);
+
+        if(param && param.gui === true){
+            const ul = document.createElement('ul');
+            ul.style.cssText = `
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                padding-top: 20px;
+                display: flex;
+                align-items: center;
+                width: 100%;
+                position: relative;
+            `;
+            let li;
+            for(let key in finalTable){
+                val = finalTable[key];
+                li = document.createElement('li');
+                li.textContent = key;
+                li.dataset.name = key;
+                li.style.cssText = `
+                    width: ${val}%;
+                    border: 1px solid #ddd;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 10px;
+                    transition: background 0s .5s;
+                    box-sizing: border-box;
+                `;
+
+                ul.appendChild(li);
+            }
+
+            li = document.createElement('li');
+            li.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: -15px;
+                width: 30px;
+                height: 30px;
+                border: 15px solid transparent;
+                border-top: 15px solid #f00;
+                padding: 0;
+                box-sizing: border-box;
+                transition: left .5s linear;
+            `;
+
+            ul.appendChild(li);
+            (param.target || document.body).innerHTML = '';
+            (param.target || document.body).appendChild(ul);
+
+            setTimeout(() => {
+                li.style.left = `calc(${rdmNum * 100}% - 15px)`;
+                ul.querySelector('li[data-name="' + rtnVal.name + '"]').style.background = 'gold';
+            })
+        }
+
+        return rtnVal;
+    }
+
+
+    
+}
