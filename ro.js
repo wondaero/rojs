@@ -281,6 +281,10 @@ class TextArea2 extends UtilFnc{
         }
     }
 
+    outputContent(){
+        return this.body.innerHTML;
+    }
+
     getContent(c){
         this.body.innerHTML = c;
     }
@@ -309,8 +313,6 @@ class Probability extends UtilFnc{
             if(!isNaN(val)){
 
             }
-
-
         }
 
     }
@@ -417,7 +419,139 @@ class Probability extends UtilFnc{
 
         return rtnVal;
     }
+}
 
-
+class Compresss{
+    //짧은것만 되는듯...
+    com(str){
+        console.log(window.btoa(unescape(encodeURIComponent(str))));
+        console.log(window.btoa(str));
+        return window.btoa(unescape(encodeURIComponent(str)));
+    }
     
+    decom(){
+        return window.atob(str);
+
+    }
+}
+
+class Pie extends UtilFnc{
+    constructor(param){
+        super();
+        const t = this;
+        t.target = param.target;
+        t.listTarget = param.listTarget;
+
+        t.data = param.data || undefined;
+    }
+
+    getRdmColor(opc = 1){
+        const mn = 80;
+        const mx = 255;
+        const r = super.getRandomNum(mn, mx);
+        const g = super.getRandomNum(mn, mx);
+        const b = super.getRandomNum(mn, mx);
+
+        return `rgba(${r}, ${g}, ${b}, ${opc})`;
+    }
+
+    setUI(){
+        const t = this;
+
+        let percentVal = 0;
+
+        t.target.classList.add('pie');
+
+        let li, wrapper, item, item2, val, color;
+
+        for(let key in t.data){
+            val = t.data[key];
+
+            color = t.getRdmColor();
+
+            li = document.createElement('li');
+            li.dataset.name = key;
+            li.dataset.val = val;
+            li.style.transform = `rotate(${percentVal}deg)`;
+
+            wrapper = document.createElement('div');
+            wrapper.classList.add('wrapper');
+
+            item = document.createElement('div');
+            
+            item.style.transform = `rotate(${t.calcDeg(val)}deg)`;
+            item.style.cssText = `
+                transform: rotate(${t.calcDeg(val)}deg);
+                background: ${color};
+            `;
+            percentVal += t.calcDeg(val);
+            
+
+            if(+val === 100){
+                li.classList.add('eq100');
+            }else if(+val > 50){
+                li.classList.add('over50');
+                item.style.transform = 'rotate(0)';
+                item.style.cssText = `
+                    transform: rotate(0);
+                    width: 50%;
+                    left: 50%;
+                    background: ${color};
+                `;
+
+                item2 = document.createElement('div');
+
+                item2.style.cssText = `
+                    width: 50%;
+                    transform: rotate(${t.calcDeg(val)}deg);
+                    background: ${color};
+                `;
+
+                wrapper.appendChild(item2);
+            }
+            
+            li.appendChild(wrapper);
+            wrapper.appendChild(item);
+            
+
+            t.target.appendChild(li);
+
+            li = document.createElement('li');
+            li.dataset.name = key;
+            li.innerHTML = `
+                <span></span><strong>${key}</strong>
+            `;
+            li.style.cssText = `
+                display: flex;
+                margin-bottom: 5px;
+                align-items: center;
+                cursor: pointer;
+            `;
+            li.querySelector('span').style.cssText = `
+                margin-right: 5px;
+                background: ${color};
+                width: 30px;
+                height: 30px;
+            `;
+
+            li.onmouseover = (e) => {
+                const trg = e.target.nodeName === 'LI' ? e.target : e.target.closest('li');
+                t.target.querySelector('li[data-name="' + trg.dataset.name + '"]').style.scale = (1.2);
+            }
+            li.onmouseout = (e) => {
+                const trg = e.target.nodeName === 'LI' ? e.target : e.target.closest('li');
+                t.target.querySelector('li[data-name="' + trg.dataset.name + '"]').style.scale = (1);
+            }
+            this.listTarget.append(li);
+        }
+
+    }
+
+    calcDeg(val){
+        return 360 / (100 / val);
+    }
+
+    setData(d){
+        t.data = d;
+    }
 }

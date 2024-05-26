@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body{margin: 50px;}
+        .pie{
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            box-sizing: border-box;
+            position: relative;
+            margin-bottom: 50px;
+        }
+        .pie *{box-sizing: border-box;}
+        
+        .pie > li{
+            width: 100%;
+            height: 100%;
+            border-radius: 0 100px 100px 0;
+            display: flex;
+            justify-content: flex-end;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        
+        .pie > li > .wrapper{
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 0 100px 100px 0;
+            position: relative;
+        }
+        .pie > li.eq100 .wrapper{
+            width: 100%;
+            border-radius: 50%;
+        }
+        .pie > li.eq100 .wrapper > div{
+            width: 100%;
+            left: 0;
+        }
+        .pie > li.over50 .wrapper{
+            width: 100%;
+            border-radius: 50%;
+        }
+        .pie > li.over50 .wrapper > div{
+            position: absolute;
+            left: 0;
+        }
+        .pie > li > .wrapper > div{
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 255, .2);
+            transform-origin: 100% 50%;
+            /* transform: rotate(45deg); */
+            position: relative;
+            left: -100%;
+        }
+        </style>
+
+</head>
+<body>
+    <ul id="pie" class="pie">
+        <!-- <li>
+            <div class="wrapper">
+                <div></div>
+            </div>
+        </li> -->
+    </ul>
+    <ul id="pieList"></ul>
+
+    <script src="./ro.js"></script>
+    <script>
+
+        const pie = new Pie({
+            target: document.querySelector('#pie'),
+            listTarget: document.querySelector('#pieList'),
+            data: {
+                복숭아: 10,
+                사과: 20,
+                귤: 65,
+                // 귤: 20,
+                감: 5,
+            }
+        });
+
+        pie.setUI();
+
+    </script>
+</body>
+</html>
