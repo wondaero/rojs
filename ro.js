@@ -324,6 +324,8 @@ class Probability extends UtilFnc{
     getItem(param){
         const rdmNum = Math.random();
         console.log(rdmNum);
+        const rdmDeg = (360 * rdmNum) + 1080;
+        console.log(rdmDeg + 'deg');
         const finalTable = {};
         
         let val;
@@ -359,70 +361,29 @@ class Probability extends UtilFnc{
             }
         }
 
-        console.log(rtnVal);
-
         if(param && param.gui === true){
-            const ul = document.createElement('ul');
-            ul.style.cssText = `
-                list-style: none;
-                margin: 0;
-                padding: 0;
-                padding-top: 20px;
-                display: flex;
-                align-items: center;
-                width: 100%;
-                position: relative;
-            `;
-            let li;
-            for(let key in finalTable){
-                val = finalTable[key];
-                li = document.createElement('li');
-                li.textContent = key;
-                li.dataset.name = key;
-                li.style.cssText = `
-                    width: ${val}%;
-                    border: 1px solid #ddd;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 10px;
-                    transition: background 0s .5s;
-                    box-sizing: border-box;
-                `;
+            
+            const pieUl = document.createElement('ul');
+            pieUl.classList.add('pie');
+            const pieListUl = document.createElement('ul');
+            
+            (param.target || document.body).appendChild(pieUl);
+            (param.target || document.body).appendChild(pieListUl);
 
-                ul.appendChild(li);
-            }
-
-            li = document.createElement('li');
-            li.style.cssText = `
-                position: absolute;
-                top: 0;
-                left: -15px;
-                width: 30px;
-                height: 30px;
-                border: 15px solid transparent;
-                border-top: 15px solid #f00;
-                padding: 0;
-                box-sizing: border-box;
-                transition: left .5s linear;
-            `;
-
-            ul.appendChild(li);
-            (param.target || document.body).innerHTML = '';
-            (param.target || document.body).appendChild(ul);
-
-            setTimeout(() => {
-                li.style.left = `calc(${rdmNum * 100}% - 15px)`;
-                ul.querySelector('li[data-name="' + rtnVal.name + '"]').style.background = 'gold';
-            })
+            const pie = new Pie({
+                target: pieUl,
+                listTarget: pieListUl,
+                data: finalTable
+            });
+    
+            pie.setUI();
         }
 
         return rtnVal;
     }
 }
 
-class Compresss{
-    //짧은것만 되는듯...
+class Compresss{    //짧은것만 되는듯...
     com(str){
         console.log(window.btoa(unescape(encodeURIComponent(str))));
         console.log(window.btoa(str));
@@ -455,7 +416,7 @@ class Pie extends UtilFnc{
         return `rgba(${r}, ${g}, ${b}, ${opc})`;
     }
 
-    setUI(){
+    setUI(cb){
         const t = this;
 
         let percentVal = 0;
@@ -544,6 +505,8 @@ class Pie extends UtilFnc{
             }
             this.listTarget.append(li);
         }
+
+        if(cb && typeof cb === 'function') cb();
 
     }
 
